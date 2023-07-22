@@ -20,11 +20,13 @@ function DragandDrop({ onChildImageUpload }) {
         event.preventDefault();
         setDragging(false);
         const file = event.dataTransfer.files[0];
-        onChildImageUpload(file);
+        console.log('Drop', file)
         // Do something with the dropped file
         const reader = new FileReader();
         reader.onloadend = () => {
             setImagePreview(reader.result);
+            onChildImageUpload(reader.result);
+
         };
         reader.readAsDataURL(file);
     };
