@@ -1,44 +1,49 @@
-import React, { useState, createRef } from 'react'
+import React, { useState, createRef, useEffect } from 'react'
 import Cropper from 'react-cropper'
+import LightButton from '../../components/LightButton';
 import '../../../node_modules/cropperjs/dist/cropper.css';
-
+import DragandDrop from '../../components/DragandDrop';
 const defaultSrc =
-    "https://raw.githubusercontent.com/roadmanfong/react-cropper/master/example/img/child.jpg";
-function ImageTransformation() {
-    const [image, setImage] = useState(defaultSrc);
-    const [cropData, setCropData] = useState("#");
+    "https://images.contentstack.io/v3/assets/blt7359e2a55efae483/blt549032e6f65d185e/648afff350d8edcbdf2f1baa/hero-composable-3_(1).svg";
+function ImageTransformation({ image }) {
+    // const [image, setImage] = useState(defaultSrc);
+    // const [cropData, setCropData] = useState("#");
+    const [trial, setTrial] = useState(false);
+
+    // console.log('Image Transform', cropData)
     const cropperRef = createRef();
-    const onChange = (e) => {
-        e.preventDefault();
-        let files;
-        if (e.dataTransfer) {
-            files = e.dataTransfer.files;
-        } else if (e.target) {
-            files = e.target.files;
-        }
-        const reader = new FileReader();
-        reader.onload = () => {
-            setImage(reader.result);
-        };
-        reader.readAsDataURL(files[0]);
-    };
 
-    const getCropData = () => {
+
+    const handleDownload = () => {
         if (typeof cropperRef.current?.cropper !== "undefined") {
-            setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
+            const link = document.createElement("a");
+            link.href = cropperRef.current?.cropper.getCroppedCanvas().toDataURL();
+            link.download = "image.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     };
-
+    if (image == null && trial == false) {
+        return (
+            <>
+                <div className='flex flex-col justify-center items-center'>
+                    <div className='text-3xl text-center mt-5'>You have not uploaded Image Please Upload! OR </div>
+                    <LightButton text='Use Default' onClick={() => setTrial(true)} />
+                </div>
+                <DragandDrop />
+            </>
+        )
+    }
+    if (image == null && trial == true) {
+        image = defaultSrc
+    }
     return (
-        <div>
-            <div style={{ width: "100%" }}>
-                <input type="file" onChange={onChange} />
-                <button>Use default img</button>
-                <br />
-                <br />
+        <div className='flex flex-row w-full'>
+            <div className='w-1/2'>
                 <Cropper
                     ref={cropperRef}
-                    style={{ height: 400, width: "100%" }}
+                    style={{ height: '100vh', width: "100%" }}
                     zoomTo={0.5}
                     initialAspectRatio={1}
                     preview=".img-preview"
@@ -49,32 +54,24 @@ function ImageTransformation() {
                     background={false}
                     responsive={true}
                     autoCropArea={1}
-                    checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
+                    checkOrientation={false}
                     guides={true}
                 />
             </div>
-            <div>
-                <div className="box" style={{ width: "50%", float: "right" }}>
-                    <h1>Preview</h1>
+            <div className='w-1/2 flex flex-col'>
+                <div className="self-center w-96">
+                    <h1 className='text-3xl text-center mt-5'>Preview</h1>
                     <div
-                        className="img-preview"
-                        style={{ width: "100%", float: "left", height: "300px" }}
+                        className="img-preview w-full h-96"
                     />
                 </div>
-                <div
-                    className="box"
-                    style={{ width: "50%", float: "right", height: "300px" }}
-                >
-                    <h1>
-                        <span>Crop</span>
-                        <button style={{ float: "right" }} onClick={getCropData}>
-                            Crop Image
-                        </button>
-                    </h1>
-                    <img style={{ width: "100%" }} src={cropData} alt="cropped" />
+                <div className=" self-center mt-5 h-96" >
+
+                    <LightButton text='Download' onClick={handleDownload} />
+                    {/* <img style={{ width: "100%" }} src={cropData} alt="cropped" /> */}
+                    {/* <button onClick={() => handleDownload(cropData)}>Download</button> */}
                 </div>
             </div>
-            <br style={{ clear: "both" }} />
         </div>
     )
 }
