@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import LightButton from '../../components/LightButton'
-import cars from '../../../public/Demo-images/car.jpg'
 
 function Tag({ image }) {
     const [selectedImage, setSelecetedImage] = useState(null);
     const [tagsArray, setTagsArray] = useState();
+    const [loading, setLoading] = useState(false);
     const photos = [
         'car.jpg',
         'desk.jpg',
@@ -19,6 +19,7 @@ function Tag({ image }) {
         for fetching the tags related to files.
     */
     const handleTagsClick = async () => {
+        setLoading(true);
         const filePath = `../../../public/Demo-images/${selectedImage}`;
         const response = await fetch(filePath);
         const blob = await response.blob();
@@ -44,9 +45,7 @@ function Tag({ image }) {
 
             const data = await response.json();
             setTagsArray(data.result.tags.slice(0, 10));
-            console.log(data);
-            console.log('final array', tagsArray)
-            console.log('final array', tagsArray)
+            setLoading(false);
 
         } catch (error) {
             console.error("Fetch error:", error);
@@ -58,9 +57,11 @@ function Tag({ image }) {
     if (selectedImage) {
         return (
             <div className='flex flex-row h-[calc(93vh)] bg-cyan-100 border-red-800  items-center'>
-                <img src={`../../public/Demo-images/${selectedImage}`} className='w-1/2 rounded-xl m-5 self-center' />
+                <img src={`Demo-images/${selectedImage}`} className='w-1/2 rounded-xl m-5 self-center' />
                 <div className='w-1/2 h-96 place-self-center flex justify-center items-center'>
-                    {!tagsArray && <LightButton text="Get Tags" onClick={handleTagsClick} />}
+                    {!tagsArray && (loading ? <LightButton text="loading..." onClick={handleTagsClick} /> :
+                        <LightButton text="Get Tags" onClick={handleTagsClick} />
+                    )}
                     {
                         tagsArray &&
                         (<div>
