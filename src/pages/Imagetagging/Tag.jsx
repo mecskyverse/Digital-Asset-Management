@@ -13,30 +13,17 @@ function Tag({ image }) {
         'Universe.jpg',
         'waterfall.jpg'
     ]
-    /* 
-        Major Role of this function is that we need to send an image file to Imagga API for tag generation. 
-        The file constructor is reading the image as an blob object then  this file is transefered to fetchData()
-        for fetching the tags related to files.
-    */
-    const handleTagsClick = async () => {
-        const filePath = `Demo-images/${selectedImage}`;
-        const response = await fetch(filePath);
-        const blob = await response.blob();
-        const file = new File([blob], 'car.jpg');
 
-        const formData = new FormData();
-        formData.append('image', file);
-        fetchData(formData);
+    const handleTagsClick = async () => {
+        fetchData();
     }
-    const fetchData = async (form) => {
+    const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await fetch('https://api.imagga.com/v2/tags', {
-                method: "POST",
+            const response = await fetch(`https://github.com/mecskyverse/Digital-Asset-Management/blob/main/public/Demo-images/${selectedImage}`, {
                 headers: {
-                    Authorization: `Basic ${btoa(import.meta.env.VITE_IMAGGA_API_KEY)}`,
-                },
-                body: form
+                    'Authorization': 'Basic ' + btoa('acc_a278fd3f6c62f78:eb085c7a646dfb49c07861593155b1e3')
+                }
             });
 
             if (!response.ok) {
