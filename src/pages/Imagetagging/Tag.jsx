@@ -7,7 +7,7 @@ function Tag({ image }) {
     const [loading, setLoading] = useState(false);//will change the ui when we are calling fetch function
     //All the photos array to use in map function for rendering.
     const photos = [
-        'car.jpg',
+        'car.jp',
         'desk.jpg',
         'mountain.jpg',
         'team.jpg',
@@ -30,6 +30,7 @@ function Tag({ image }) {
             });
 
             if (!response.ok) {
+                response.text().then(text => console.log('msg', text))
                 throw new Error("Network response was not ok");
             }
             //Getting the data in form of array and slicing top 10 tags of the image
