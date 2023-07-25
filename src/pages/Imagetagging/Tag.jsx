@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import LightButton from '../../components/LightButton'
 import cars from '../../../public/Demo-images/car.jpg'
 function Tag({ image }) {
-    const [selectedImage, setSelecetedImage] = useState(null);
-    const [tagsArray, setTagsArray] = useState();
-    const [loading, setLoading] = useState(false);
+    const [selectedImage, setSelecetedImage] = useState(null); //keep track of weather we have selected an image or not
+    const [tagsArray, setTagsArray] = useState();//keep track of have we got the tags array from imagga api
+    const [loading, setLoading] = useState(false);//will change the ui when we are calling fetch function
+    //All the photos array to use in map function for rendering.
     const photos = [
         'car.jpg',
         'desk.jpg',
@@ -13,14 +14,16 @@ function Tag({ image }) {
         'Universe.jpg',
         'waterfall.jpg'
     ]
-
+    //getting this image url from github and sending this to imagga api with GET request and response we are getting tags for the relevant image.
+    const imgUrl = `https://raw.githubusercontent.com/mecskyverse/Digital-Asset-Management/main/public/Demo-images/${selectedImage}`
     const handleTagsClick = async () => {
         fetchData();
     }
-    const fetchData = async () => {
+    const fetchData = async (form) => {
         setLoading(true);
         try {
-            const response = await fetch(`https://github.com/mecskyverse/Digital-Asset-Management/blob/main/public/Demo-images/${selectedImage}`, {
+            //sending the GET request 
+            const response = await fetch(`https://api.imagga.com/v2/tags?image_url=${imgUrl}`, {
                 headers: {
                     'Authorization': 'Basic ' + btoa('acc_a278fd3f6c62f78:eb085c7a646dfb49c07861593155b1e3')
                 }
@@ -29,7 +32,7 @@ function Tag({ image }) {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
-
+            //Getting the data in form of array and slicing top 10 tags of the image
             const data = await response.json();
             setTagsArray(data.result.tags.slice(0, 10));
             setLoading(false);
@@ -42,7 +45,8 @@ function Tag({ image }) {
     };
 
 
-
+    //It will only render if in first page we choose an image from 6 of them when 
+    //we will choose the image the render UI will change
     if (selectedImage) {
         return (
             <div className='flex flex-row h-[calc(93vh)] bg-cyan-100 border-red-800  items-center'>
@@ -73,6 +77,7 @@ function Tag({ image }) {
             </div>
         )
     }
+    //If we have not selected an image then this page will render showing all the image option we are currently having
     return (
         <div>
             <h1 className='text-4xl text-center mt-3'>Select any one image for its tag</h1>
