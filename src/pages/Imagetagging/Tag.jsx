@@ -25,7 +25,7 @@ function Tag({ image }) {
             //sending the GET request 
             const response = await fetch(`https://api.imagga.com/v2/tags?image_url=${imgUrl}`, {
                 headers: {
-                    'Authorization': 'Basic ' + btoa('acc_a278fd3f6c62f78:eb085c7a646dfb49c07861593155b1e3')
+                    'Authorization': 'Basic ' + btoa(import.meta.env.VITE_IMAGGA_API_KEY)
                 }
             });
 
