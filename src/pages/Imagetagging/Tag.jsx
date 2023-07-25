@@ -91,7 +91,7 @@ function Tag({ image }) {
 
                     <img
                         key={index}
-                        src={`../../../public/Demo-images/${photo}`}
+                        src={`Demo-images/${photo}`}
                         alt={`Photo ${photo}`}
                         className='w-full h-full object-cover rounded hover:scale-105 transition-transform'
                         onClick={() => setSelecetedImage(photo)}
