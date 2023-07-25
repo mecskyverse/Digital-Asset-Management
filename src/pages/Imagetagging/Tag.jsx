@@ -20,7 +20,7 @@ function Tag({ image }) {
     */
     const handleTagsClick = async () => {
         setLoading(true);
-        const filePath = `../../../public/Demo-images/${selectedImage}`;
+        const filePath = `Demo-images/${selectedImage}`;
         const response = await fetch(filePath);
         const blob = await response.blob();
         const file = new File([blob], 'car.jpg');
