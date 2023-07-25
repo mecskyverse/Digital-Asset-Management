@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import LightButton from '../../components/LightButton'
-// import cars from '../../../public/Demo-images/cars.jpg'
+import cars from '../../../public/Demo-images/car.jpg'
 function Tag({ image }) {
     const [selectedImage, setSelecetedImage] = useState(null);
     const [tagsArray, setTagsArray] = useState();
@@ -19,7 +19,7 @@ function Tag({ image }) {
         for fetching the tags related to files.
     */
     const handleTagsClick = async () => {
-        const filePath = `../../../public/Demo-images/${selectedImage}`;
+        const filePath = `Demo-images/${selectedImage}`;
         const response = await fetch(filePath);
         const blob = await response.blob();
         const file = new File([blob], 'car.jpg');
