@@ -7,7 +7,7 @@ function Tag({ image }) {
     const [loading, setLoading] = useState(false);//will change the ui when we are calling fetch function
     //All the photos array to use in map function for rendering.
     const photos = [
-        'car.jp',
+        'car.jpg',
         'desk.jpg',
         'mountain.jpg',
         'team.jpg',
