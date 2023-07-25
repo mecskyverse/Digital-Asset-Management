@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import LightButton from '../../components/LightButton'
-
+// import cars from '../../../public/Demo-images/cars.jpg'
 function Tag({ image }) {
     const [selectedImage, setSelecetedImage] = useState(null);
     const [tagsArray, setTagsArray] = useState();
@@ -19,8 +19,7 @@ function Tag({ image }) {
         for fetching the tags related to files.
     */
     const handleTagsClick = async () => {
-        setLoading(true);
-        const filePath = `Demo-images/${selectedImage}`;
+        const filePath = `../../../public/Demo-images/${selectedImage}`;
         const response = await fetch(filePath);
         const blob = await response.blob();
         const file = new File([blob], 'car.jpg');
@@ -30,6 +29,7 @@ function Tag({ image }) {
         fetchData(formData);
     }
     const fetchData = async (form) => {
+        setLoading(true);
         try {
             const response = await fetch('https://api.imagga.com/v2/tags', {
                 method: "POST",
@@ -48,7 +48,9 @@ function Tag({ image }) {
             setLoading(false);
 
         } catch (error) {
+
             console.error("Fetch error:", error);
+            setLoading(false)
         }
     };
 
