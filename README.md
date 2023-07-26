@@ -11,7 +11,6 @@ Digital Asset Management is a react-based web application which provides a one-s
 - [Code Examples](#code-examples)
 - [Tests](#tests)
 - [Documentation](#documentation)
-- [Troubleshooting](#troubleshooting)
 - [FAQ](#faq)
 - [Contact Information](#contact-information)
 
@@ -48,5 +47,39 @@ Currently, the only thing needed is api key for imagga image api which I have sh
 ![digital-asset-management-working](https://github.com/mecskyverse/Digital-Asset-Management/assets/91150257/cb9ee3d3-47b4-445a-beea-c74a6c4441b8)
 Through the above chart you can get a fair idea of how the app is currently working. We are currently using normal react hooks for state management which I am planning to update with Redux toolkit.
  As Optimization part was not explained in the image I am going to cover it here.  
+
 #### Optimization 
-Things like format conversion, compression or file changes will be done in this part. As per my research this task can be via different methods like with vanilla javascriipt methods like using File API which is javascript's own API or via using a npm package or through an API. To challenge myself and as per our personalized need I have decided to go with the HTML5 Canvas method. 
+Things like format conversion, compression or file changes will be done in this part. As per my research this task can be done via different methods like with vanilla javascriipt, using File API which is javascript's own API or via using a npm package or through HTML5 Canvas method. To challenge myself and as per our personalized need I have decided to go with the HTML5 Canvas method. 
+
+The basic idea is to draw the image on a canvas, adjust its quality, and then convert the canvas data back to an image file. By doing this we can have a variable compression level. Same for the conversion we can again use the canvas and download the converted image into new format. 
+
+### Tests
+Currently, there are no unit tests or Integration test in the project. But I am planning to use jest as a platform for testing the web application. Jest also provides a test coverage report out of the box. So, we can have a better test coverage of our code.
+
+### Documentation
+I am going to use Docusaurus for documentation purposes. It is an open-source documentation website generator. It is designed to make it easy for developers to create, maintain, and deploy documentation websites for their projects.
+
+### FAQs
+
+#### What is My Project?
+
+Its an digital asset management app which is currently being planned for managing images. All image related problem can have one stop solution. Format conversions, editing, padding, AI tagging. All of these can be done easily in browser itself. Although, I have started making this project for #TechSurf2023 but I am liking this project building no matter if I selected for next round or not I am going to complete this project.
+
+#### I encountered an error during installation. What should I do?
+
+Make sure you are using correct version of node and npm. For further assistance you can contact me.
+
+#### Why have you added .env here?
+
+I know that you should never leak your environment variables but for testing purposes for the judges to make it easy for them I open-sourced .env
+
+### Contact
+You can contact me through this platforms I am mostly active at this platforms.
+
+[X](https://www.twitter.com/meckskyverse)
+[Instagram](https://www.instagram.com/mecskyverse)
+
+or you can contact me through my portfolio
+
+[Portfolio](#).
+
