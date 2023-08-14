@@ -1,14 +1,28 @@
-import React, { useState } from 'react'
-
+import React, { useState, useRef } from 'react'
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { IconButton } from '@mui/material';
 function DragandDrop({ onChildImageUpload }) {
 
     const [dragging, setDragging] = useState(false);
     const [droppedFile, setDroppedFile] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const fileInputRef = useRef(null);
 
+    //Function executed when we click on file upload button
+    const handleUpload = () => {
+        fileInputRef.current.click();
+        console.log("Upload button clicked")
+    }
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    };
+
+    //Set of functions executed while we drag an image over home page
     const handleDragOver = (event) => {
         event.preventDefault();
+        console.log("Dragging..")
         setDragging(true);
     };
 
@@ -20,40 +34,37 @@ function DragandDrop({ onChildImageUpload }) {
         event.preventDefault();
         setDragging(false);
         const file = event.dataTransfer.files[0];
-        console.log('Drop', file)
-        // Do something with the dropped file
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImagePreview(reader.result);
-            onChildImageUpload(reader.result);
-
-        };
-        reader.readAsDataURL(file);
+        setSelectedFile(file)
     };
+
+
     return (
-        <div className="bg-gradient-to-r from-blue-500 to-pink-500 bg-opacity-75 h-96 flex justify-around items-center">
-            <div
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                className={`p-8 w-1/3 border-2 rounded-md border-emerald-900 ${dragging ? 'border-dashed bg-blue-400' : 'border-solid'} text-center text-gray-200 h-24`}
-            >
-                {droppedFile ? (
-                    <p>Dropped File: {droppedFile.name}</p>
-                ) : (
-                    <p>Drag and drop a image here</p>
-                )}
-            </div>
-            {imagePreview && (
-                <img
-
-                    src={imagePreview}
-                    alt="Selected File Preview"
-                    style={{ maxWidth: '600px', maxHeight: '370px' }}
-                />
-
+        <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`p-8 w-3/4 border-2 ml-20 md:w-1/3 rounded-md border-emerald-900 ${dragging ? 'border-dashed bg-blue-400' : 'border-solid'} text-center text-gray-200 h-24 z-40 flex items-center justify-center`}
+        >
+            {selectedFile ? (
+                <p>Uploaded File: {selectedFile.name}</p>
+            ) : (
+                <div className='flex justify-center gap-7 items-center'>
+                    <p className='text-lg'>Drag and drop your image here</p>
+                    <IconButton aria-label="upload" size='large' onClick={handleUpload}>
+                        <FileUploadIcon fontSize='inherit' />
+                    </IconButton>
+                    <input
+                        type="file"
+                        accept="image/png, image/jpeg"
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                    />
+                </div>
             )}
         </div>
+
+
 
     )
 }
