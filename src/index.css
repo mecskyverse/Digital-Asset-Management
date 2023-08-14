@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "roboto";
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -44,4 +51,58 @@
 
 .img-preview {
   overflow: hidden;
+}
+
+.nav-items {
+  width: 100vw;
+}
+
+.logo {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'bebas neue';
+  font-size: 40px;
+  margin-left: 7px;
+}
+
+.hero-header {
+  color: white;
+  font-family: 'bebas neue';
+  font-style: normal;
+  margin-top: 7px;
+
+}
+
+.bg-hero {
+  background-image: url('../public/hero-section.png');
+  background-size: cover;
+  height: 100vh;
+  background-color: #9699f8;
+  background-position: center;
+  display: relative;
+
+  @media (max-width: 1023px) {
+    /* Add your styles here */
+    backdrop-filter: blur(10px);
+  }
+
+}
+
+/* Added before to add blur effect on background and not on overlay content */
+.bg-hero:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  z-index: -1;
+
+  filter: blur(10px);
+  -moz-filter: blur(10px);
+  -webkit-filter: blur(10px);
+  -o-filter: blur(10px);
+
+  transition: all 2s linear;
+  -moz-transition: all 2s linear;
+  -webkit-transition: all 2s linear;
+  -o-transition: all 2s linear;
 }
