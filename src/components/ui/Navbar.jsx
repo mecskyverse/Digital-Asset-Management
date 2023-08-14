@@ -49,7 +49,7 @@ function Navbar() {
     if (sidebarOpen) {
         return (
             <div>
-                <nav className='w-full shadow-lg flex justify-center'>
+                <nav className='w-full shadow-lg flex justify-center z-40'>
                     <span className='flex items-center'>
                         <img src={logo} className='h-7 self-center' alt="Example" />
                         <span className='self-center logo'>Imager</span>
@@ -71,13 +71,13 @@ function Navbar() {
 
 
     return (
-        <nav className='w-full shadow-lg flex justify-center'>
+        <nav className='w-full shadow-lg flex justify-center z-30'>
             <button className='md:hidden absolute left-7 top-4' onClick={toggleDrawer()}><MenuIcon fontSize="medium" color="secondary" /></button>
-            <span className='flex items-center'>
+            <span className='flex items-center md:absolute left-5 '>
                 <img src={logo} className='h-7 self-center' alt="Example" />
                 <span className='self-center logo'>Imager</span>
             </span>
-            <ul className='md:flex sm:flex-row flex-col items-center justify-center hidden' >
+            <ul className='md:flex sm:flex-row flex-col items-center justify-center hidden text-white' >
                 <li className='mx-2 p-4 hover:scale-110 transition-transform'><Link to='/' >Home</Link></li>
                 <li className='mx-2 p-4 hover:scale-110 transition-transform'><Link to='/transform' >Transform</Link></li>
                 <li className='mx-2 p-4 hover:scale-110 transition-transform'>Focal Point</li>
