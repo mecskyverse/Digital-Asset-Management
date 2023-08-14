@@ -76,7 +76,7 @@ I know that you should never leak your environment variables but for testing pur
 ### Contact
 You can contact me through this platforms I am mostly active at this platforms.
 
-[X](https://www.twitter.com/meckskyverse)
+[X](https://www.twitter.com/meckskyverse)<br>
 [Instagram](https://www.instagram.com/mecskyverse)
 
 or you can contact me through my portfolio
