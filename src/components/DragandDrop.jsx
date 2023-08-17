@@ -43,7 +43,7 @@ function DragandDrop({ onChildImageUpload }) {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`p-8 w-3/4 border-2 ml-20 md:w-1/3 rounded-md border-emerald-900 ${dragging ? 'border-dashed bg-blue-400' : 'border-solid'} text-center text-gray-200 h-24 z-40 flex items-center justify-center`}
+            className={`p-8 w-3/4 border-2 ml-20 md:w-1/3 rounded-md border-emerald-900 ${dragging ? 'border-dashed bg-blue-400' : 'border-solid'} text-center text-gray-200 h-24 flex items-center justify-center`}
         >
             {selectedFile ? (
                 <p>Uploaded File: {selectedFile.name}</p>
