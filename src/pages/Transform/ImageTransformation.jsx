@@ -1,4 +1,5 @@
 import React, { useState, createRef, useEffect } from 'react'
+import { useSelector } from 'react-redux';
 import Cropper from 'react-cropper'
 import LightButton from '../../components/LightButton';
 import '../../../node_modules/cropperjs/dist/cropper.css';
@@ -6,14 +7,11 @@ import DragandDrop from '../../components/DragandDrop';
 const defaultSrc =
     "https://images.contentstack.io/v3/assets/blt7359e2a55efae483/blt549032e6f65d185e/648afff350d8edcbdf2f1baa/hero-composable-3_(1).svg";
 function ImageTransformation({ image }) {
-    // const [image, setImage] = useState(defaultSrc);
-    // const [cropData, setCropData] = useState("#");
+
     const [trial, setTrial] = useState(false);
-
-    // console.log('Image Transform', cropData)
     const cropperRef = createRef();
-
-
+    const imageData = useSelector((state) => state.image.imageData);
+    console.log('Data', imageData);
     const handleDownload = () => {
         if (typeof cropperRef.current?.cropper !== "undefined") {
             const link = document.createElement("a");
@@ -24,7 +22,7 @@ function ImageTransformation({ image }) {
             document.body.removeChild(link);
         }
     };
-    if (image == null && trial == false) {
+    if (imageData == null && trial == false) {
         return (
             <>
                 <div className='flex flex-col justify-center items-center'>
@@ -47,7 +45,7 @@ function ImageTransformation({ image }) {
                     zoomTo={0.5}
                     initialAspectRatio={1}
                     preview=".img-preview"
-                    src={image}
+                    src={imageData}
                     viewMode={1}
                     minCropBoxHeight={10}
                     minCropBoxWidth={10}
