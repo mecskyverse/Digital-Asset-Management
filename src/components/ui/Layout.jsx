@@ -6,7 +6,7 @@ export default function Layout() {
     return (
         <>
             <div className="site-wrapper">
-                {/* < Navbar /> */}
+                < Navbar />
                 <Outlet />
 
             </div>
