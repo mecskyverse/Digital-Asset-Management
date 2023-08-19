@@ -72,22 +72,6 @@
 
 }
 
-.bg-hero {
-  background-image: url('../public/hero-section.png');
-  background-size: cover;
-  height: 100vh;
-  background-color: #9699f8;
-  background-position: center;
-  display: relative;
-  z-index: -10;
-
-  @media (max-width: 1023px) {
-    /* Add your styles here */
-    backdrop-filter: blur(10px);
-  }
-
-}
-
 /* Added before to add blur effect on background and not on overlay content */
 .bg-hero:before {
   content: "";
@@ -96,17 +80,39 @@
   height: 100%;
   background: inherit;
   z-index: -1;
-
   filter: blur(10px);
   -moz-filter: blur(10px);
   -webkit-filter: blur(10px);
   -o-filter: blur(10px);
-
   transition: all 2s linear;
   -moz-transition: all 2s linear;
   -webkit-transition: all 2s linear;
   -o-transition: all 2s linear;
 }
+
+.bg-hero {
+  background-image: url('../public/hero-section.png');
+  background-size: cover;
+  height: 100vh;
+  background-color: #9699f8;
+  background-position: center;
+  display: absolute;
+  top: 0;
+  margin-top: -56px;
+
+  @media (max-width: 1023px) {
+    /* Add your styles here */
+    backdrop-filter: blur(10px);
+  }
+
+}
+
+.nav {
+  z-index: 40;
+  backdrop-filter: blur(1px);
+}
+
+
 
 /* Sidebar */
 .side-nav {
