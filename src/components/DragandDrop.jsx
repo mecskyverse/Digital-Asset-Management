@@ -1,11 +1,15 @@
 import React, { useState, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { setImageData, clearImageData } from '../redux/features/imageSlice';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { IconButton } from '@mui/material';
 function DragandDrop({ onChildImageUpload }) {
 
     const [dragging, setDragging] = useState(false);
-    const [droppedFile, setDroppedFile] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const imageData = useSelector((state) => state.image.imageData);
+    const imageName = useSelector((state) => state.image.imageName)
+    const dispatch = useDispatch();
     const fileInputRef = useRef(null);
 
     //Function executed when we click on file upload button
@@ -16,6 +20,17 @@ function DragandDrop({ onChildImageUpload }) {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64ImageData = e.target.result;
+                dispatch(setImageData({ imageName: file.name, imageData: base64ImageData }));
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            dispatch(clearImageData());
+        }
         setSelectedFile(file);
     };
 
@@ -36,8 +51,7 @@ function DragandDrop({ onChildImageUpload }) {
         const file = event.dataTransfer.files[0];
         setSelectedFile(file)
     };
-
-
+    console.log(imageData)
     return (
         <div
             onDragOver={handleDragOver}
@@ -45,8 +59,8 @@ function DragandDrop({ onChildImageUpload }) {
             onDrop={handleDrop}
             className={`p-8 w-3/4 border-2 ml-20 md:w-1/3 rounded-md border-emerald-900 ${dragging ? 'border-dashed bg-blue-400' : 'border-solid'} text-center text-gray-200 h-24 flex items-center justify-center`}
         >
-            {selectedFile ? (
-                <p>Uploaded File: {selectedFile.name}</p>
+            {imageData ? (
+                <p>Uploaded File: {imageName}</p>
             ) : (
                 <div className='flex justify-center gap-7 items-center'>
                     <p className='text-lg'>Drag and drop your image here</p>
