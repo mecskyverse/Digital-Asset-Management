@@ -25,7 +25,7 @@ function App() {
     <Route path="/" element={<Layout />}>
       <Route index element={<Home childImage={onImageUpload} image={image} />} />
       <Route path='transform' element={<ImageTransformation image={image} />} />
-      <Route path='tagging' element={<Tag image={image} />} />
+      <Route path='imagetagging' element={<Tag image={image} />} />
 
       <Route path="*" element={<NotFound />} />
     </Route>
