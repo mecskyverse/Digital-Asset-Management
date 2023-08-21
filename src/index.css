@@ -21,14 +21,10 @@
   -webkit-text-size-adjust: 100%;
 }
 
-.svg-container {
-  width: 50vw;
-  height: 350px;
-  background-image: url('../src/assets/HomeDown.svg');
-  /* background-size: cover; */
-  background-repeat: no-repeat;
-  background-position: center;
-
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .text-container {
@@ -42,12 +38,6 @@
   /* 116.667% */
   letter-spacing: -1px;
 }
-
-/* .box {
-  display: inline-block;
-  padding: 10px;
-  box-sizing: border-box;
-} */
 
 .img-preview {
   overflow: hidden;
@@ -102,6 +92,7 @@
 
   @media (max-width: 1023px) {
     /* Add your styles here */
+    margin-top: -60px;
     backdrop-filter: blur(10px);
   }
 
@@ -121,6 +112,7 @@
   left: 0;
   bottom: 0;
   width: 300px;
+  z-index: 100;
 }
 
 .background {
@@ -183,4 +175,11 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+
+.bg-edit {
+  background-color: #0093E9;
+  background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+
+
 }
