@@ -1,12 +1,15 @@
 import React, { useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { setImageData, clearImageData } from '../redux/features/imageSlice';
+import LightButton from './LightButton';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { IconButton } from '@mui/material';
-function DragandDrop({ onChildImageUpload }) {
+function DragandDrop() {
 
     const [dragging, setDragging] = useState(false);
-    const [selectedFile, setSelectedFile] = useState(null);
+
+    const location = useLocation();
     const imageData = useSelector((state) => state.image.imageData);
     const imageName = useSelector((state) => state.image.imageName)
     const dispatch = useDispatch();
@@ -57,10 +60,13 @@ function DragandDrop({ onChildImageUpload }) {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`p-8 w-3/4 border-2 ml-20 md:w-1/3 rounded-md border-emerald-900 ${dragging ? 'border-dashed bg-blue-400' : 'border-solid'} text-center text-gray-200 h-24 flex items-center justify-center`}
+            className={`p-8 w-3/4 border-2 ml-20 md:w-1/3 rounded-md border-emerald-900 ${location.pathname === '/Edit' ? 'text-blue-800' : 'text-gray-200'} ${dragging ? 'border-dashed bg-blue-400' : 'border-solid'} text-center h-24 flex items-center justify-center`}
         >
             {imageData ? (
-                <p>Uploaded File: {imageName}</p>
+                <div className='flex gap-8 items-center'>
+                    <p >Uploaded File: {imageName}</p>
+                    <LightButton text='Upload New' onClick={() => dispatch(clearImageData())} />
+                </div>
             ) : (
                 <div className='flex justify-center gap-7 items-center'>
                     <p className='text-lg'>Drag and drop your image here</p>
