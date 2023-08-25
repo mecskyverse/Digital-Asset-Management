@@ -13,6 +13,9 @@ const imageSlice = createSlice({
             state.imageName = action.payload.imageName;
             state.imageData = action.payload.imageData;
         } ,
+        updateImageData: (state, action) => {
+            state.imageData = action.payload;
+          },
         clearImageData: (state, action) => {
             state.imageName = null
             state.imageData = null
@@ -20,6 +23,6 @@ const imageSlice = createSlice({
     }
 })
 
-export const {setImageData, clearImageData} = imageSlice.actions;
+export const {setImageData, updateImageData, clearImageData} = imageSlice.actions;
 export default imageSlice.reducer;
 
