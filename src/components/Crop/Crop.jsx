@@ -1,13 +1,19 @@
 import React, { createRef, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Cropper from 'react-cropper'
 import '../../../node_modules/cropperjs/dist/cropper.css';
+import { updateImageData } from '../../redux/features/imageSlice';
 import DragandDrop from '../DragandDrop';
 import LightButton from '../../components/LightButton';
 function Crop() {
     const [trial, setTrial] = useState(false);
+    const [loading, setLoading] = useState(false);
     const imageData = useSelector((state) => state.image.imageData);
     const cropperRef = createRef();
+    const dispatch = useDispatch();
+
+    const defaultSrc = 'https://images.contentstack.io/v3/assets/blt7359e2a55efae483/blt549032e6f65d185e/648afff350d8edcbdf2f1baa/hero-composable-3_(1).svg'
+
     const handleDownload = () => {
         if (typeof cropperRef.current?.cropper !== "undefined") {
             const link = document.createElement("a");
@@ -18,6 +24,15 @@ function Crop() {
             document.body.removeChild(link);
         }
     };
+    const handleCropFinalize = () => {
+        setLoading(true);
+        if (typeof cropperRef.current?.cropper !== 'undefined') {
+            const cropperCanvas = cropperRef.current?.cropper.getCroppedCanvas();
+            const base64ImageData = cropperCanvas.toDataURL();
+            dispatch(updateImageData(base64ImageData));
+        }
+        setLoading(false);
+    }
 
     if (imageData == null && trial == false) {
         return (
@@ -30,8 +45,8 @@ function Crop() {
             </div>
         )
     }
-    if (image == null && trial == true) {
-        image = defaultSrc
+    if (imageData == null && trial == true) {
+        dispatch(updateImageData(defaultSrc))
     }
     return (
         <>
@@ -61,7 +76,12 @@ function Crop() {
                     />
                 </div >
                 <div className=" self-center mt-5 h-96" >
-
+                    <button
+                        className="w-40 self-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleCropFinalize}
+                    >
+                        {!loading ? 'Finalize Crop' : 'loading...'}
+                    </button>
                     <LightButton text='Download' onClick={handleDownload} />
                 </div>
             </div >
