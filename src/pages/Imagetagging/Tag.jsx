@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import LightButton from '../../components/LightButton'
 import cars from '../../../public/Demo-images/car.jpg'
+import { useSelector, useDispatch } from 'react-redux';
+import { ConstructionOutlined } from '@mui/icons-material';
+
 function Tag({ image }) {
     const [selectedImage, setSelecetedImage] = useState(null); //keep track of weather we have selected an image or not
     const [tagsArray, setTagsArray] = useState();//keep track of have we got the tags array from imagga api
     const [loading, setLoading] = useState(false);//will change the ui when we are calling fetch function
+    const imageData = useSelector((state) => state.image.imageData);
+    const [imageUrl, setImageUrl] = useState(null);
+    // console.log(imageData)
+    const url = 'https://digitalassetserver.onrender.com:10000/image'
     //All the photos array to use in map function for rendering.
+
     const photos = [
         'car.jpg',
         'desk.jpg',
@@ -17,7 +25,22 @@ function Tag({ image }) {
     //getting this image url from github and sending this to imagga api with GET request and response we are getting tags for the relevant image.
     const imgUrl = `https://raw.githubusercontent.com/mecskyverse/Digital-Asset-Management/main/public/Demo-images/${selectedImage}`
     const handleTagsClick = async () => {
-        fetchData();
+        console.log('Handle tags clicked')
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image: imageData })
+        })
+        if (!response.ok) {
+            response.text().then(text => console.log('msg', text))
+            throw new Error("Network response was not ok")
+        }
+        const data = await response.text();
+        console.log('data', data);
+        console.log('ended')
+        // fetchData();
     }
     const fetchData = async (form) => {
         setLoading(true);
@@ -44,6 +67,8 @@ function Tag({ image }) {
             setLoading(false)
         }
     };
+
+
 
 
     //It will only render if in first page we choose an image from 6 of them when 
