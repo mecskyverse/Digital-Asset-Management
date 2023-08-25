@@ -23,6 +23,7 @@ function DragandDrop() {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+        console.log(file);
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -34,7 +35,6 @@ function DragandDrop() {
         } else {
             dispatch(clearImageData());
         }
-        setSelectedFile(file);
     };
 
     //Set of functions executed while we drag an image over home page
@@ -52,9 +52,18 @@ function DragandDrop() {
         event.preventDefault();
         setDragging(false);
         const file = event.dataTransfer.files[0];
-        setSelectedFile(file)
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64ImageData = e.target.result;
+                dispatch(setImageData({ imageName: file.name, imageData: base64ImageData }));
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            dispatch(clearImageData());
+        }
     };
-    console.log(imageData)
     return (
         <div
             onDragOver={handleDragOver}
