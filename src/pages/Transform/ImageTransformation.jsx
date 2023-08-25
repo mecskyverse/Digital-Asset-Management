@@ -4,8 +4,6 @@ import Overlay from '../../components/Overlay/Overlay'
 import Frames from '../../components/Frames/Frames';
 import '../../../node_modules/cropperjs/dist/cropper.css';
 function ImageTransformation() {
-
-
     const [editOption, setEditOption] = useState('Crop')
     return (
         <div className='flex flex-row w-full bg-edit h-[93vh]'>
