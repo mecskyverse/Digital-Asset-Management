@@ -11,7 +11,7 @@ function Tag({ image }) {
     const imageData = useSelector((state) => state.image.imageData);
     const [imageUrl, setImageUrl] = useState(null);
     // console.log(imageData)
-    const url = 'https://digitalassetserver.onrender.com:10000/image'
+    const url = 'https://digitalassetserver.onrender.com/image'
     //All the photos array to use in map function for rendering.
 
     const photos = [
@@ -25,7 +25,6 @@ function Tag({ image }) {
     //getting this image url from github and sending this to imagga api with GET request and response we are getting tags for the relevant image.
     const imgUrl = `https://raw.githubusercontent.com/mecskyverse/Digital-Asset-Management/main/public/Demo-images/${selectedImage}`
     const handleTagsClick = async () => {
-        console.log('Handle tags clicked')
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -39,7 +38,6 @@ function Tag({ image }) {
         }
         const data = await response.text();
         console.log('data', data);
-        console.log('ended')
         // fetchData();
     }
     const fetchData = async (form) => {
