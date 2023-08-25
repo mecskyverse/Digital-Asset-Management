@@ -14,7 +14,7 @@ app.post('/image', (req, res) => {
             console.log(err);
             res.status(500).send('Error saving image');
         } else {
-            res.send(`http://localhost:${port}/${filename}`);
+            res.send(`https://digitalassetserver.onrender.com:${port}/${filename}`);
         }
     });
 });
