@@ -5,6 +5,7 @@ import '../../../node_modules/cropperjs/dist/cropper.css';
 import { updateImageData } from '../../redux/features/imageSlice';
 import DragandDrop from '../DragandDrop';
 import LightButton from '../../components/LightButton';
+
 function Crop() {
     const [trial, setTrial] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -12,7 +13,7 @@ function Crop() {
     const cropperRef = createRef();
     const dispatch = useDispatch();
 
-    const defaultSrc = 'https://images.contentstack.io/v3/assets/blt7359e2a55efae483/blt549032e6f65d185e/648afff350d8edcbdf2f1baa/hero-composable-3_(1).svg'
+    const defaultSrc = '../../../public/contentStack.jpg'
 
     const handleDownload = () => {
         if (typeof cropperRef.current?.cropper !== "undefined") {
@@ -36,7 +37,7 @@ function Crop() {
 
     if (imageData == null && trial == false) {
         return (
-            <div className='bg-edit w-full h-[93vh] flex flex-col items-center gap-10 justify-center'>
+            <div className='bg-edit w-5/6 h-[93vh] flex flex-col items-center gap-10 justify-center'>
                 <div className='flex flex-col justify-center items-center'>
                     <div className='text-3xl text-center mt-5'>You have not uploaded Image Please Upload! OR </div>
                     <LightButton text='Use Default' onClick={() => setTrial(true)} />
