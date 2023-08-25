@@ -48,7 +48,7 @@ function Overlay() {
         return () => {
             window.removeEventListener('resize', updateDimensions);
         };
-    }, [styleDetail]);
+    }, [styleDetail, text]);
 
     const trackPos = (data) => {
         setPosition({ x: data.x, y: data.y });
