@@ -16,7 +16,7 @@ app.get('/status', (req, res) => {
 app.post('/image', (req, res) => {
     const image = req.body.image;
     const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
-    const filename = `image-${Date.now()}.png`;
+    const filename = `image-${Date.now()}.jpg`;
     fs.writeFile(filename, base64Data, 'base64', (err) => {
         if (err) {
             console.log(err);
