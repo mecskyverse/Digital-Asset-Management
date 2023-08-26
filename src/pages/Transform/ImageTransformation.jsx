@@ -16,7 +16,6 @@ function ImageTransformation() {
                 {['Crop', 'Overlay', 'Frames'].map((item) => {
                     return (
                         <>
-                            {console.log(editOption === item)}
                             <button onClick={() => setEditOption(item)} className={`${editOption == item ? 'bg-white' : 'hover:bg-slate-300'} h-28 text-xl`}>{item}</button >
                             <hr />
                         </>
