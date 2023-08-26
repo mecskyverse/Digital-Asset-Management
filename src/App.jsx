@@ -10,6 +10,7 @@ import Home from './pages/Home/Home'
 import Layout from './components/UI/Layout'
 import NotFound from './components/UI/NotFound'
 import ImageTransformation from './pages/Transform/ImageTransformation'
+import Effects from './pages/Effects/Effects'
 import './index.css'
 import Tag from './pages/Imagetagging/Tag'
 
@@ -23,10 +24,10 @@ function App() {
   }
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-      <Route index element={<Home childImage={onImageUpload} image={image} />} />
-      <Route path='edit' element={<ImageTransformation image={image} />} />
-      <Route path='imagetagging' element={<Tag image={image} />} />
-
+      <Route index element={<Home childImage={onImageUpload} />} />
+      <Route path='edit' element={<ImageTransformation />} />
+      <Route path='imagetagging' element={<Tag />} />
+      <Route path='effects' element={<Effects />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   )
