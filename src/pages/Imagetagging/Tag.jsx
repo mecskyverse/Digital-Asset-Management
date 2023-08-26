@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import LightButton from '../../components/LightButton'
 import cars from '../../../public/Demo-images/car.jpg'
 import { useSelector, useDispatch } from 'react-redux';
-import { ConstructionOutlined } from '@mui/icons-material';
-
+import DragandDrop from '../../components/DragandDrop';
 function Tag({ image }) {
     const [selectedImage, setSelecetedImage] = useState(null); //keep track of weather we have selected an image or not
     const [tagsArray, setTagsArray] = useState();//keep track of have we got the tags array from imagga api
     const [loading, setLoading] = useState(false);//will change the ui when we are calling fetch function
-    const imageData = useSelector((state) => state.image.imageData);
     const [imageUrl, setImageUrl] = useState(null);
+    const [trial, setTrial] = useState(false);
+    const imageData = useSelector((state) => state.image.imageData);
     // console.log(imageData)
     const url = 'https://digitalassetserver.onrender.com/image'
     //All the photos array to use in map function for rendering.
@@ -22,29 +22,42 @@ function Tag({ image }) {
         'Universe.jpg',
         'waterfall.jpg'
     ]
-    //getting this image url from github and sending this to imagga api with GET request and response we are getting tags for the relevant image.
-    const imgUrl = `https://raw.githubusercontent.com/mecskyverse/Digital-Asset-Management/main/public/Demo-images/${selectedImage}`
+
+    //getting this image url from github and sending this to imagga api with GET request and response we are getting tags for the relevant image If the image is not uploaded then this images is for demo purposes.
+
+    useEffect(() => {
+        setImageUrl(`https://raw.githubusercontent.com/mecskyverse/Digital-Asset-Management/main/public/Demo-images/${selectedImage}`)
+    }, [selectedImage])
+
+
     const handleTagsClick = async () => {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ image: imageData })
-        })
-        if (!response.ok) {
-            response.text().then(text => console.log('msg', text))
-            throw new Error("Network response was not ok")
-        }
-        const data = await response.text();
-        console.log('data', data);
-        // fetchData();
-    }
-    const fetchData = async (form) => {
         setLoading(true);
+        if (imageData != null) {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image: imageData })
+            })
+            if (!response.ok) {
+                response.text().then(text => console.log('msg', text))
+                throw new Error("Network response was not ok")
+            }
+            const data = await response.text();
+            console.log(data)
+            fetchData(data);
+        }
+        else {
+            fetchData(imageUrl)
+        }
+    }
+    const fetchData = async (data) => {
+        const url = data;
         try {
+            console.log('sending request', url)
             //sending the GET request 
-            const response = await fetch(`https://api.imagga.com/v2/tags?image_url=${imgUrl}`, {
+            const response = await fetch(`https://api.imagga.com/v2/tags?image_url=${url}`, {
                 headers: {
                     'Authorization': 'Basic ' + btoa(import.meta.env.VITE_IMAGGA_API_KEY)
                 }
@@ -68,13 +81,25 @@ function Tag({ image }) {
 
 
 
+    if (imageData == null && trial == false) {
 
-    //It will only render if in first page we choose an image from 6 of them when 
-    //we will choose the image the render UI will change
-    if (selectedImage) {
+        return (
+            <div className='bg-edit w-full h-[93vh] flex flex-col items-center gap-10 justify-center'>
+                <div className='flex flex-col justify-center items-center'>
+                    <div className='text-3xl text-center mt-5'>You have not uploaded Image Please Upload! </div>
+                    <div className='text-3xl text-center'>OR</div>
+                    <LightButton text='Use Demo Images' onClick={() => setTrial(true)} />
+                </div>
+                <DragandDrop />
+            </div>
+        )
+
+    }
+    //This section will only be render if we select something from demo images or if we have uploaded our own image
+    if (imageData || selectedImage) {
         return (
             <div className='flex flex-row h-[calc(93vh)] bg-cyan-100 border-red-800  items-center'>
-                <img src={`Demo-images/${selectedImage}`} className='w-1/2 rounded-xl m-5 self-center' />
+                <img src={imageData != null ? imageData : `Demo-images/${selectedImage}`} className='w-1/2 rounded-xl m-5 self-center' />
                 <div className='w-1/2 h-96 place-self-center flex justify-center items-center'>
                     {!tagsArray && (loading ? <LightButton text="loading..." onClick={handleTagsClick} /> :
                         <LightButton text="Get Tags" onClick={handleTagsClick} />
@@ -101,7 +126,7 @@ function Tag({ image }) {
             </div>
         )
     }
-    //If we have not selected an image then this page will render showing all the image option we are currently having
+    //This section is for showing demo images 
     return (
         <div>
             <h1 className='text-4xl text-center mt-3'>Select any one image for its tag</h1>
