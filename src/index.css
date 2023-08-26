@@ -183,3 +183,27 @@
 
 
 }
+
+/* Effects page  */
+
+.main-image {
+  max-width: 90%;
+  max-height: 85%;
+  object-fit: contain;
+}
+
+.sidebar-item {
+  cursor: pointer;
+  padding: 1rem;
+  position: relative;
+  transition: background-color 800ms;
+}
+
+
+/*Effects page Slider css */
+
+
+.slider {
+  width: 100%;
+  cursor: pointer;
+}
