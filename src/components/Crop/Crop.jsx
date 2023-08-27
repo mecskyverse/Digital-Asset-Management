@@ -5,6 +5,8 @@ import '../../../node_modules/cropperjs/dist/cropper.css';
 import { updateImageData } from '../../redux/features/imageSlice';
 import DragandDrop from '../DragandDrop';
 import LightButton from '../../components/LightButton';
+import pic from '../../../public/contentStack.jpg'
+
 
 function Crop() {
     const [trial, setTrial] = useState(false);
@@ -78,7 +80,7 @@ function Crop() {
                 </div >
                 <div className=" self-center mt-5 h-96" >
                     <button
-                        className="w-40 self-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        className="w-40 self-center bg-blue-500 border m-3 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                         onClick={handleCropFinalize}
                     >
                         {!loading ? 'Finalize Crop' : 'loading...'}
