@@ -7,10 +7,10 @@ import { FaUpload } from 'react-icons/fa'
 function DragandDrop() {
 
     const [dragging, setDragging] = useState(false);
-
     const location = useLocation();
     const imageData = useSelector((state) => state.image.imageData);
     const imageName = useSelector((state) => state.image.imageName)
+    const imageFormat = useSelector((state) => state.image.imageFormat)
     const dispatch = useDispatch();
     const fileInputRef = useRef(null);
 
@@ -19,7 +19,18 @@ function DragandDrop() {
         fileInputRef.current.click();
         console.log("Upload button clicked")
     }
+    function extractImageFormat(dataURI) {
+        // Extract the format part after "image/"
+        const formatMatch = dataURI.match(/image\/(.*?)\;/);
 
+        if (formatMatch && formatMatch.length > 1) {
+            const format = formatMatch[1];
+            return format;
+        }
+
+    }
+    console.log(imageFormat)
+    // console.log(imageData)
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         console.log(file);
@@ -27,7 +38,8 @@ function DragandDrop() {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const base64ImageData = e.target.result;
-                dispatch(setImageData({ imageName: file.name, imageData: base64ImageData }));
+                const format = extractImageFormat(base64ImageData)
+                dispatch(setImageData({ imageName: file.name, imageData: base64ImageData, imageFormat: format }));
             };
 
             reader.readAsDataURL(file);
@@ -55,7 +67,8 @@ function DragandDrop() {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const base64ImageData = e.target.result;
-                dispatch(setImageData({ imageName: file.name, imageData: base64ImageData }));
+                const format = extractImageFormat(base64ImageData)
+                dispatch(setImageData({ imageName: file.name, imageData: base64ImageData, imageFormat: format }));
             };
 
             reader.readAsDataURL(file);
