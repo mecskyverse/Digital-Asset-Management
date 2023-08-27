@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateImageData } from '../../redux/features/imageSlice';
+import { updateImageData, undoImageData, redoImageData } from '../../redux/features/imageSlice';
 import LightButton from '../../components/LightButton';
 import Slider from '../../components/Slider'
 import SidebarItem from '../../components/EffectsSidebar'
-import { CssTwoTone } from '@mui/icons-material';
+import DragandDrop from '../../components/DragandDrop';
+import { FaUndo, FaRedo } from 'react-icons/fa'
+
 const DEFAULT_OPTIONS = [
     {
         name: 'Brightness',
@@ -84,11 +86,19 @@ function App() {
     const selectedOption = options[selectedOptionIndex]
     const [imageDimension, setImageDimension] = useState({ height: 0, width: 0 })
     const [loading, setLoading] = useState(false)
+    const [trial, setTrial] = useState(false);
 
+    const imageDataIndex = useSelector((state) => state.image.imageDataIndex);
+    const imageDataHistory = useSelector((state) => state.image.imageDataHistory)
+    const totalStates = imageDataHistory.length
     const imageData = useSelector((state) => state.image.imageData);
     const canvasRef = useRef();
     const imageRef = useRef();
     const dispatch = useDispatch();
+    const defaultSrc = '../../../public/contentStack.jpg'
+
+
+
 
     const handleImageLoad = () => {
         const currHeight = imageRef.current.naturalHeight;
@@ -104,6 +114,17 @@ function App() {
             })
         })
     }
+    const handleUndo = () => {
+        if (imageDataIndex > 0) {
+            dispatch(undoImageData());
+        }
+    };
+
+    const handleRedo = () => {
+        if (imageDataIndex < totalStates - 1) {
+            dispatch(redoImageData());
+        }
+    };
 
     function getImageStyle(forCanvas = false) {
         const filters = options.map(option => {
@@ -148,6 +169,20 @@ function App() {
         setLoading(false)
     }
 
+    if (imageData == null && trial == true) {
+        dispatch(updateImageData(defaultSrc))
+    }
+    if (imageData == null && trial == false) {
+        return (
+            <div className='bg-edit w-full h-[93vh] flex flex-col items-center gap-10 justify-center'>
+                <div className='flex flex-col justify-center items-center'>
+                    <div className='text-3xl text-center mt-5'>You have not uploaded Image Please Upload! OR </div>
+                    <LightButton text='Use Default' onClick={() => setTrial(true)} />
+                </div>
+                <DragandDrop />
+            </div>
+        )
+    }
 
     return (
         <div className="flex flex-row h-[93vh] bg-gradient-to-r from-blue-400 via-purple-200 to-pink-500">
@@ -175,11 +210,19 @@ function App() {
                         />
                     )
                 })}
+                <div className='flex gap-10 justify-center mt-10 text-gray-800 text-xl'>
+                    <button onClick={handleUndo} className='hover:bg-slate-600 bg-opacity-25 p-5' disabled={imageDataIndex === 0}>
+                        <FaUndo />
+                    </button>
+                    <button onClick={handleRedo} className='hover:bg-slate-600 bg-opacity-25 p-5' disabled={imageDataIndex === totalStates - 1}>
+                        <FaRedo />
+                    </button>
+                </div>
                 <button
                     className="w-40 self-center mt-10 border bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                     onClick={() => handleDownload(true)}
                 >
-                    {loading ? 'loading...' : 'Finalize Frame'}
+                    {loading ? 'loading...' : 'Finalize Effect'}
                 </button>
                 <span className='self-center mt-10'>
                     <LightButton
