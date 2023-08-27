@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import logo from '../../../public/logo.png'
 import { Sidebar } from '../Sidebar/Sidebar';
 function Navbar() {
-    const itemValues = ['Home', 'Edit', 'Image Tagging', 'Focal Point', 'Effects']
+    const itemValues = ['Home', 'Edit', 'Image Tagging', 'Effects', 'Optimizations']
     return (
         <div>
             <div className='md:hidden z-[150]'>
