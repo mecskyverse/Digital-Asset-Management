@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { setImageData, clearImageData } from '../redux/features/imageSlice';
 import LightButton from './LightButton';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { IconButton } from '@mui/material';
+import { FaUpload } from 'react-icons/fa'
 function DragandDrop() {
 
     const [dragging, setDragging] = useState(false);
@@ -79,9 +78,9 @@ function DragandDrop() {
             ) : (
                 <div className='flex justify-center gap-7 items-center'>
                     <p className='text-lg'>Drag and drop your image here</p>
-                    <IconButton aria-label="upload" size='large' onClick={handleUpload}>
-                        <FileUploadIcon fontSize='inherit' />
-                    </IconButton>
+                    <span className='text-xl text-gray-600 hover:bg-slate-300 p-3 rounded-lg' onClick={handleUpload}>
+                        <FaUpload fontSize='inherit' />
+                    </span >
                     <input
                         type="file"
                         accept="image/png, image/jpeg"
