@@ -12,6 +12,7 @@ import ImageTransformation from './pages/Transform/ImageTransformation'
 import Effects from './pages/Effects/Effects'
 import './index.css'
 import Tag from './pages/Imagetagging/Tag'
+import Optimizations from './pages/Optimizations/Optimizations'
 
 function App() {
   const router = createBrowserRouter(createRoutesFromElements(
@@ -20,6 +21,7 @@ function App() {
       <Route path='edit' element={<ImageTransformation />} />
       <Route path='imagetagging' element={<Tag />} />
       <Route path='effects' element={<Effects />} />
+      <Route path='optimizations' element={<Optimizations />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   )
