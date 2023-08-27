@@ -5,6 +5,7 @@ const initialState = {
     imageName: null,
     imageData : null,
     imageDataHistory: [],
+    imageFormat:'jpg'
 
 }
 const imageSlice = createSlice({
@@ -17,7 +18,7 @@ const imageSlice = createSlice({
 
             state.imageName = action.payload.imageName;
             state.imageData = action.payload.imageData;
-
+            state.imageFormat = action.payload.imageFormat
               // Adding the current state to the history and setting the initial ImageData index as 0
             state.imageDataHistory.push({ imageData: state.imageData });
             state.imageDataIndex = 0;
