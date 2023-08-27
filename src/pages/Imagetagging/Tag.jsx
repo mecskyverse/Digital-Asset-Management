@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import LightButton from '../../components/LightButton'
-import cars from '../../../public/Demo-images/car.jpg'
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import DragandDrop from '../../components/DragandDrop';
-function Tag({ image }) {
-    const [selectedImage, setSelecetedImage] = useState(null); //keep track of weather we have selected an image or not
+function Tag() {
+    const [selectedImage, setSelectedImage] = useState(null); //keep track of weather we have selected an image or not
     const [tagsArray, setTagsArray] = useState();//keep track of have we got the tags array from imagga api
-    const [loading, setLoading] = useState(false);//will change the ui when we are calling fetch function
+    const [loading, setLoading] = useState({
+        uploading: false,
+        fetching: false
+    });//will change the ui when we are calling fetch function
     const [imageUrl, setImageUrl] = useState(null);
-    const [trial, setTrial] = useState(false);
+    const [trial, setTrial] = useState({
+        showDemo: false,
+        showNothing: true,
+        showFinalImage: false
+    });
     const imageData = useSelector((state) => state.image.imageData);
-    // console.log(imageData)
     const url = 'https://digitalassetserver.onrender.com/image'
     //All the photos array to use in map function for rendering.
 
@@ -29,10 +34,22 @@ function Tag({ image }) {
         setImageUrl(`https://raw.githubusercontent.com/mecskyverse/Digital-Asset-Management/main/public/Demo-images/${selectedImage}`)
     }, [selectedImage])
 
+    const handleSelectedPhoto = (photo) => {
+        setSelectedImage(photo);
+        setTrial({
+            showDemo: false,
+            showNothing: false,
+            showFinalImage: true
+        })
+        console.log('handle selecte click')
+    }
 
     const handleTagsClick = async () => {
-        setLoading(true);
         if (imageData != null) {
+            setLoading({
+                uploading: true,
+                fetching: false
+            });
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -46,9 +63,17 @@ function Tag({ image }) {
             }
             const data = await response.text();
             console.log(data)
+            setLoading({
+                uploading: false,
+                fetching: true
+            });
             fetchData(data);
         }
         else {
+            setLoading({
+                uploading: false,
+                fetching: true
+            });
             fetchData(imageUrl)
         }
     }
@@ -70,7 +95,10 @@ function Tag({ image }) {
             //Getting the data in form of array and slicing top 10 tags of the image
             const data = await response.json();
             setTagsArray(data.result.tags.slice(0, 10));
-            setLoading(false);
+            setLoading({
+                uploading: false,
+                fetching: false
+            });
 
         } catch (error) {
 
@@ -81,71 +109,87 @@ function Tag({ image }) {
 
 
 
-    if (imageData == null && trial == false) {
+    if (imageData == null && trial.showNothing == true) {
 
         return (
             <div className='bg-edit w-full h-[93vh] flex flex-col items-center gap-10 justify-center'>
                 <div className='flex flex-col justify-center items-center'>
                     <div className='text-3xl text-center mt-5'>You have not uploaded Image Please Upload! </div>
                     <div className='text-3xl text-center'>OR</div>
-                    <LightButton text='Use Demo Images' onClick={() => setTrial(true)} />
+                    <LightButton text='Use Demo Images' onClick={() => setTrial({
+                        showDemo: true,
+                        showNothing: false,
+                        showFinalImage: false
+                    })} />
                 </div>
                 <DragandDrop />
             </div>
         )
 
     }
-    //This section will only be render if we select something from demo images or if we have uploaded our own image
-    if (imageData || selectedImage) {
+    //This section is for showing demo images 
+    if (trial.showDemo == true) {
         return (
-            <div className='flex flex-row h-[calc(93vh)] bg-cyan-100 border-red-800  items-center'>
-                <img src={imageData != null ? imageData : `Demo-images/${selectedImage}`} className='w-1/2 rounded-xl m-5 self-center' />
-                <div className='w-1/2 h-96 place-self-center flex justify-center items-center'>
-                    {!tagsArray && (loading ? <LightButton text="loading..." onClick={handleTagsClick} /> :
-                        <LightButton text="Get Tags" onClick={handleTagsClick} />
-                    )}
-                    {
-                        tagsArray &&
-                        (<div>
-                            <ul className="grid grid-cols-3 gap-4">
-                                {tagsArray.map((item, index) => (
-                                    <li key={index} className="p-2">
-                                        <div className="flex flex-wrap gap-1 mt-2">
-                                            <span
-                                                className="bg-gray-200 text-gray-800 px-2 py-1 rounded"
-                                            >
-                                                {item.tag.en}
-                                            </span>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>)
-                    }
+            <div>
+                <h1 className='text-4xl text-center mt-3'>Select any one image for its tag</h1>
+                <div className="grid md:grid-cols-3 grid-cols-2 gap-4 p-4">
+                    {photos.map((photo, index) => (
+
+                        <img
+                            key={index}
+                            src={`Demo-images/${photo}`}
+                            alt={`Photo ${photo}`}
+                            className='w-full h-full object-cover rounded hover:scale-105 transition-transform'
+                            onClick={() => handleSelectedPhoto(photo)}
+
+                        />
+
+                    ))}
                 </div>
             </div>
         )
     }
-    //This section is for showing demo images 
-    return (
-        <div>
-            <h1 className='text-4xl text-center mt-3'>Select any one image for its tag</h1>
-            <div className="grid md:grid-cols-3 grid-cols-2 gap-4 p-4">
-                {photos.map((photo, index) => (
+    //This section will only be render if we select something from demo images or if we have uploaded our own image
+    if (imageData || trial.showFinalImage == true) {
+        return (
 
-                    <img
-                        key={index}
-                        src={`Demo-images/${photo}`}
-                        alt={`Photo ${photo}`}
-                        className='w-full h-full object-cover rounded hover:scale-105 transition-transform'
-                        onClick={() => setSelecetedImage(photo)}
 
-                    />
+            <div className='h-[93vh] bg-cyan-100 border-red-800  items-center'>
+                <h1 className="text-5xl font-extrabold tracking-tight bg-cyan-100 text-center pt-7 pb-5">
+                    AI-Powered Image Analysis and Tagging
+                </h1>
+                <div className='flex flex-row'>
+                    <img src={imageData != null ? imageData : `Demo-images/${selectedImage}`} className='w-1/2 max-h-[93vh] rounded-xl m-5 self-center' />
+                    <div className='w-1/2 h-96 place-self-center flex justify-center items-center'>
+                        {!tagsArray && (loading.uploading ? <LightButton text="uploading..." /> : loading.fetching ? <LightButton text="fetching..." /> : <LightButton text="Get Tags" onClick={handleTagsClick} />
 
-                ))}
+                        )}
+                        {
+                            tagsArray &&
+                            (<div>
+                                <ul className="grid grid-cols-3 gap-4">
+                                    {tagsArray.map((item, index) => (
+                                        <li key={index} className="p-2">
+                                            <div className="flex flex-wrap gap-1 mt-2">
+                                                <span
+                                                    className="bg-gray-200 text-gray-800 px-2 py-1 rounded"
+                                                >
+                                                    {item.tag.en}
+                                                </span>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>)
+                        }
+                    </div>
+                </div>
             </div>
-        </div>
-    )
+
+        )
+    }
+
+
 };
 
 
