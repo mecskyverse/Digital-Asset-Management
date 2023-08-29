@@ -32,7 +32,7 @@ export const MenuItem = ({ i, value }) => {
             whileTap={{ scale: 0.95 }}
             className="side-li"
         >
-            <div onClick={clickFunction} className="text-placeholder" style={style} ><Link to={value[i] === 'Home' ? '/' : value[i].replace(/\s/g, '')} >{value[i]}</Link></div>
+            <Link to={value[i] === 'Home' ? '/' : value[i].replace(/\s/g, '')} ><div onClick={console.log(value[i])} className="text-placeholder" style={style} >{value[i]}</div></Link>
         </motion.li>
     );
 };

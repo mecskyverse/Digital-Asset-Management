@@ -1,38 +1,43 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { undoImageData, redoImageData } from '../../redux/features/imageSlice';
+
 import '../../../node_modules/cropperjs/dist/cropper.css';
-import LightButton from '../../components/LightButton';
+
 import DragandDrop from '../../components/DragandDrop';
-import { FaUndo, FaRedo } from 'react-icons/fa'
+import Metadata from '../../components/Metadata.jsx'
+
 function Optimizations() {
     const [optimizeOptions, setOptimizeOptions] = useState('Convert')
 
     const [selectedOutputFormat, setSelectedOutputFormat] = useState('jpeg');
     const [isConverted, setIsConverted] = useState(false)
+    const [originalImageDimensions, setOriginalImageDimensions] = useState({ width: 0, height: 0 });
     const [width, setWidth] = useState('');
     const [height, setHeight] = useState('');
     const [compressedDataUrl, setCompressedDataUrl] = useState(null);
-
+    const [estimatedSize, setEstimatedSize] = useState(0);
     const dispatch = useDispatch();
     const imageData = useSelector((state) => state.image.imageData)
-    const imageDataIndex = useSelector((state) => state.image.imageDataIndex);
-    const imageDataHistory = useSelector((state) => state.image.imageDataHistory)
     const imageFormat = useSelector((state) => state.image.imageFormat)
 
 
-    const totalStates = imageDataHistory.length
-    const handleUndo = () => {
-        if (imageDataIndex > 0) {
-            dispatch(undoImageData());
-        }
-    };
 
-    const handleRedo = () => {
-        if (imageDataIndex < totalStates - 1) {
-            dispatch(redoImageData());
+    useEffect(() => {
+        const img = new Image();
+        img.src = imageData;
+
+        img.onload = () => {
+            setOriginalImageDimensions({ width: img.width, height: img.height })
         }
-    };
+
+
+
+        const estimateSize = (width * height * 2) / (8 * 1024)
+        setEstimatedSize(Math.floor(estimateSize))
+        console.log(`Estimated Size: ${estimateSize.toFixed(2)} KB`);
+
+
+    }, [compressedDataUrl, width, height])
 
     const handleConvert = (isDownload = false) => {
         console.log('clicked')
@@ -56,19 +61,23 @@ function Optimizations() {
                 const a = document.createElement('a');
                 a.href = newDataURI;
                 a.download = `converted.${selectedOutputFormat}`;
-                a.textContent = 'Download';
 
 
                 document.body.appendChild(a);
                 a.click();
             }
-            setIsConverted(true)
-            // newDataURI now contains the image in the desired format
-            console.log(newDataURI);
+            else {
+                setIsConverted(true)
+                dispatch(updateImageData(base64ImageData))
+                // newDataURI now contains the image in the desired format
+                console.log(newDataURI);
+
+            }
+
         };
 
     };
-    const handleCompress = () => {
+    const handleCompress = (isDownload = false) => {
         if (!width || !height) {
             alert('Please enter valid width and height.');
             return;
@@ -80,13 +89,26 @@ function Optimizations() {
         const image = new Image();
         image.src = imageData
         image.onload = () => {
+
             canvas.width = width;
             canvas.height = height;
             ctx.drawImage(image, 0, 0, width, height);
 
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7); // Adjust quality as needed
+            const compressedDataUrl = canvas.toDataURL(`image/${selectedOutputFormat}`);
+            if (isDownload) {
+                const a = document.createElement('a');
+                a.href = compressedDataUrl;
+                a.download = `converted.${selectedOutputFormat}`;
 
-            setCompressedDataUrl(compressedDataUrl);
+
+                document.body.appendChild(a);
+                a.click();
+            }
+            else {
+                setCompressedDataUrl(compressedDataUrl);
+                dispatch(updateImageData(base64ImageData))
+            }
+
         };
     };
     if (imageData == null) {
@@ -94,7 +116,6 @@ function Optimizations() {
             <div className='bg-edit w-full h-[93vh] flex flex-col items-center gap-10 justify-center'>
                 <div className='flex flex-col justify-center items-center'>
                     <div className='text-3xl text-center mt-5'>You have not uploaded Image Please Upload!</div>
-
                 </div>
                 <DragandDrop />
             </div>
@@ -153,7 +174,7 @@ function Optimizations() {
                         (
                             <>
                                 <h1 className="text-3xl font-semibold mt-10 w-5/6 text-center">Image Compresser </h1>
-                                <section className='flex flex-row  justify-start mt-20 items-center w-5/6 h-full'>
+                                <section className='flex flex-row  justify-start mt-10 w-5/6 '>
                                     {compressedDataUrl && (
                                         <div className="mt-4 max-h-[93vh]">
                                             <h3 className="text-lg font-semibold mb-2">Compressed Image:</h3>
@@ -162,13 +183,13 @@ function Optimizations() {
                                     )}
 
                                     <div className="p-4 max-w-md mx-auto border rounded-lg shadow-lg">
-
                                         <div className="mb-2">
                                             <label htmlFor="width" className="block text-sm font-medium mb-1">Width:</label>
                                             <input
                                                 type="number"
                                                 id="width"
                                                 value={width}
+                                                placeholder={originalImageDimensions.width}
                                                 onChange={(e) => setWidth(e.target.value)}
                                                 className="w-full px-2 py-1 border rounded-md"
                                             />
@@ -179,23 +200,35 @@ function Optimizations() {
                                                 type="number"
                                                 id="height"
                                                 value={height}
+                                                placeholder={originalImageDimensions.height}
+
                                                 onChange={(e) => setHeight(e.target.value)}
                                                 className="w-full px-2 py-1 border rounded-md"
                                             />
                                         </div>
-                                        <button
-                                            onClick={handleCompress}
+                                        {compressedDataUrl ? <button
+                                            onClick={() => handleCompress(true)}
                                             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md"
                                         >
-                                            Compress
-                                        </button>
+                                            Download
+                                        </button> :
+                                            <button
+                                                onClick={() => handleCompress(false)}
+                                                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md"
+                                            >
+                                                Compress
+                                            </button>
+
+                                        }
+
 
                                     </div>
                                 </section>
+                                <p className='text-center w-5/6 mt-10'>EstimateSize : {estimatedSize} Kb</p>
                             </>
                         ) :
                         (
-                            <div>metadata</div>
+                            <Metadata />
                         )
 
             }
@@ -212,14 +245,7 @@ function Optimizations() {
                         </>
                     )
                 })}
-                <div className='flex gap-10 justify-center mt-10 text-gray-800 text-xl'>
-                    <button onClick={handleUndo} className='hover:bg-slate-600 bg-opacity-25 p-5' disabled={imageDataIndex === 0}>
-                        <FaUndo />
-                    </button>
-                    <button onClick={handleRedo} className='hover:bg-slate-600 bg-opacity-25 p-5' disabled={imageDataIndex === totalStates - 1}>
-                        <FaRedo />
-                    </button>
-                </div>
+
             </div>
         </div >
     )

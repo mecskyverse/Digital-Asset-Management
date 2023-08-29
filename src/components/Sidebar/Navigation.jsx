@@ -20,4 +20,4 @@ export const Navigation = () => (
 );
 
 const itemIds = [0, 1, 2, 3, 4];
-const itemValues = ['Home', 'Transform', 'Image Tagging', 'Focal Point', 'Effects']
+const itemValues = ['Home', 'Edit', 'Image Tagging', 'Effects', 'Optimizations']
