@@ -61,14 +61,19 @@ There is no additional configuration needed for running this app. I am using `No
 Currently, the only thing needed is api key for imagga(an AI based image tagging API) which I have shared in .env file. I know it should not be shared but this key is for demo purpose and you can use it.
 
 ### WorkFlow
-![Alt text](<Final Workflow- 1.png>)
+
+![Workflow Home Page](https://github.com/mecskyverse/Digital-Asset-Management/assets/91150257/ec2a7cbd-8a2f-4868-a2fb-6ff64226bbe9)
+
 Through the above chart you can get a fair idea of how the app is working. I have used Redux Toolkit for better state management than the prototype. 
 
 #### Home Page
-![Home Page](image.png) We have to upload the image in this DragAndDrop. And then navigate to go on other section for example on edit section. 
-![Alt text](image-1.png)
+
+![Home Page Screenshot](https://github.com/mecskyverse/Digital-Asset-Management/assets/91150257/4b95b2d8-c6bc-4a84-9ac3-7ef494176ada)
+
+We have to upload the image in this DragAndDrop. And then navigate to go on other section for example on edit section. 
+![Edit section page](https://github.com/mecskyverse/Digital-Asset-Management/assets/91150257/1596f69b-31e7-4c35-8089-2212857ffe2d)
 Or an Effect Section just use the nav and app will automatically manage the state from every path.
-![Alt text](image-2.png)
+![Effect Section page](https://github.com/mecskyverse/Digital-Asset-Management/assets/91150257/c12b50e4-73c8-4b46-8f4a-f0f592aef04e)
 
 
 ### Tests
