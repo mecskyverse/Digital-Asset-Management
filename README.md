@@ -8,56 +8,72 @@ Digital Asset Management is a react-based web application which provides a one-s
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
-- [Code Examples](#code-examples)
+- [Workflow](#workflow)
 - [Tests](#tests)
-- [Documentation](#documentation)
-- [FAQ](#faq)
-- [Contact Information](#contact-information)
+- [FAQ](#faqs)
+- [Contact Information](#contact)
 
 
 
 ## Installation 
-To get started with the project, follow these steps:
+This Project is divided into two parts 1st is react and app and second is an HTTP server which works as a standalone Restful API. Directory named as httpServer contains code for express server and root directory contains code for Frontend Part.
+
+To start with 
 
 1. **Clone the repository:**
 2. **Navigate to the project directory:**
-3. **Install dependencies using npm:**
-4. **Run a local deployement**
+
+To Run the HTTP server 
+```
+cd ./httpServer
+yarn i
+node Server.js
+```
+
+
+To get started with React Project 
+
+
+3. **Install dependencies using npm in root directory**
+4. **Run a local deployment**
 
    ```
    git clone https://github.com/mecskyverse/Digital-Asset-Management.git
-   cd project-name
+   cd Digital-Asset-Management
    npm install
    npm run dev
 
-Open port 5173 on your localhost and you are good to go.<br>
+Open port 5173 and 8081(server) on your localhost and you are good to go.<br>
 For Demo purposes I have added .env in github files with the api key.
 
 ### Usage
-* Upload an image through Drag And Drop.
-* Image Cropping and Downloading.
-* AI Powered Image Tagging.
-* Currently Working On (Design Upgrade, Transform, Overlay, Padding, Focal Point, Image Optimization).
+* Upload an image through Drag And Drop or upload button.
+* Image Editing features like Cropping, Framing, Text Overlay is supported.
+* At any point of time we can finalize edits, download the image or use Undo and Redo features.
+* Effects Page helps to add effects like Brightness, Contrast, Saturation etc. in the image.
+* AI Powered Image Tagging helps us to get the Tags of our image.
+* Optimization page can help the image with format conversion, metadata extraction or resizing the image.
+* Home Page is fully responsive with a sidebar do check it out. 
+* This app can support any type of image be it png, jpeg and webP.
 
 ### Configuration
 There is no additional configuration needed for running this app. I am using `Node version 18.16.0` and `NPM version 9.5.1` while building this project.<br>
-Currently, the only thing needed is api key for imagga image api which I have shared in .env file. I know it should not be shared but this key is for demo purpose and you can use it.
+Currently, the only thing needed is api key for imagga(an AI based image tagging API) which I have shared in .env file. I know it should not be shared but this key is for demo purpose and you can use it.
 
-### Code Examples
-![digital-asset-management-working](https://github.com/mecskyverse/Digital-Asset-Management/assets/91150257/cb9ee3d3-47b4-445a-beea-c74a6c4441b8)
-Through the above chart you can get a fair idea of how the app is currently working. We are currently using normal react hooks for state management which I am planning to update with Redux toolkit.
- As Optimization part was not explained in the image I am going to cover it here.  
+### WorkFlow
+![Alt text](<Final Workflow- 1.png>)
+Through the above chart you can get a fair idea of how the app is working. I have used Redux Toolkit for better state management than the prototype. 
 
-#### Optimization 
-Things like format conversion, compression or file changes will be done in this part. As per my research this task can be done via different methods like with vanilla javascriipt, using File API which is javascript's own API or via using a npm package or through HTML5 Canvas method. To challenge myself and as per our personalized need I have decided to go with the HTML5 Canvas method. 
+#### Home Page
+![Home Page](image.png) We have to upload the image in this DragAndDrop. And then navigate to go on other section for example on edit section. 
+![Alt text](image-1.png)
+Or an Effect Section just use the nav and app will automatically manage the state from every path.
+![Alt text](image-2.png)
 
-The basic idea is to draw the image on a canvas, adjust its quality, and then convert the canvas data back to an image file. By doing this we can have a variable compression level. Same for the conversion we can again use the canvas and download the converted image into new format. 
 
 ### Tests
-Currently, there are no unit tests or Integration test in the project. But I am planning to use jest as a platform for testing the web application. Jest also provides a test coverage report out of the box. So, we can have a better test coverage of our code.
-
-### Documentation
-I am going to use Docusaurus for documentation purposes. It is an open-source documentation website generator. It is designed to make it easy for developers to create, maintain, and deploy documentation websites for their projects.
+For Unit testing after deploying the project locally  
+`npm run test`. It will use jest to perform Unit test.
 
 ### FAQs
 
@@ -81,5 +97,5 @@ You can contact me through this platforms I am mostly active at this platforms.
 
 or you can contact me through my portfolio
 
-[Portfolio](#).
+[Portfolio](https://aakashverma.vercel.app/).
 
